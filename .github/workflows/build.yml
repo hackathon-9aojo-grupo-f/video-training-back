@@ -12,11 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        name: Checkout project
       - uses: actions/setup-java@v3
-        name: Setup Java
         with:
+          java-version: '17'
           distribution: 'temurin'
-          java-version: 17
-      - name: Run test and building
-        run: gradle clean test compileJava jar
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: build
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Package
+          path: build/libs
