@@ -25,19 +25,15 @@ class MovieServiceImplTest {
 
     @InjectMocks
     private MovieServiceImpl movieService;
-
     @Mock
     private MovieRepository movieRepository;
 
     @Test
     void shouldFindMovieWhenMethodCalled(){
         Movie movie = new Movie();
-
         when(movieRepository.findMoviesByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(anyString(), anyString()))
                 .thenReturn(Collections.singletonList(movie));
-
         List<Movie> list = movieService.findMovie("select * from Movie where title like '%MovieName%'");
-
         Assertions.assertEquals(1, list.size());
     }
 
@@ -45,7 +41,6 @@ class MovieServiceImplTest {
     void shouldThrowErrorWhenMoviesDoesNotExists(){
         when(movieRepository.findMoviesByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(anyString(), anyString()))
                 .thenReturn(Collections.emptyList());
-
         assertThrows(MovieNotFoundException.class, () -> movieService.findMovie("select * from Movie where title like '%MovieName%'"));
     }
 
@@ -53,9 +48,7 @@ class MovieServiceImplTest {
     void shouldGetMovieWithSuccessfuly(){
         when(movieRepository.findById(anyLong()))
                 .thenReturn(Optional.of(new Movie()));
-
         Movie movie = movieService.getMovie(1L);
-
         Assertions.assertNotNull(movie);
     }
 
@@ -63,8 +56,6 @@ class MovieServiceImplTest {
     void shouldThrowErrorWhenGetMovieHasError(){
         when(movieRepository.findById(anyLong()))
                 .thenReturn(Optional.empty());
-
         assertThrows(MovieNotFoundException.class, () -> movieService.getMovie(1L));
     }
-
 }
